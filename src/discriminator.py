@@ -1,3 +1,4 @@
+import torch
 import torch.nn as nn
 
 
@@ -5,7 +6,7 @@ class Discriminator(nn.Module):
     def __init__(self):
         super().__init__()
         self.conv1 = nn.Sequential(
-            nn.Conv2d(1, 3, 1, padding=1),
+            nn.Conv2d(4, 3, 1, padding=1),
             nn.ReLU(),
             nn.Conv2d(3, 32, 3, padding=1),
             nn.ReLU(),
@@ -29,7 +30,7 @@ class Discriminator(nn.Module):
         )
 
         self.fc = nn.Sequential(
-            nn.Linear(64 * 32 * 24, 100),
+            nn.Linear(64*24*32, 100),
             nn.Tanh(),
             nn.Linear(100, 2),
             nn.Tanh(),
@@ -38,4 +39,19 @@ class Discriminator(nn.Module):
         )
 
     def forward(self, x):
-        return self.fc(self.conv3(self.conv2(self.conv1(x))))
+        x = self.conv1(x)
+        x = self.conv2(x)
+        x = self.conv3(x)
+        # print('after convolution =', x.size())
+        x = x.view(-1, 64 * 24 * 32)
+        x = self.fc(x)
+        # print('after fc = ', x.size())
+        return x
+
+
+D = Discriminator()
+x = torch.rand([5, 4, 192, 256])
+model = Discriminator()
+print('Discriminator input', x.size())  # [-1, 4, 192, 256] because 4 comes from 3 color channel + salience layer.
+out = model(x)
+print('Discriminator out ', out.size())  # [-1, 1]

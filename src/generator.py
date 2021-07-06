@@ -1,8 +1,5 @@
 import torch
 import torch.nn as nn
-import torch.nn.functional as F
-import torch.optim as optim
-from torch.utils.data import DataLoader, TensorDataset
 
 
 class Generator(nn.Module):
@@ -56,53 +53,53 @@ class Generator(nn.Module):
             nn.ReLU(),
             nn.Conv2d(512, 512, 3, padding=1),
             nn.ReLU(),
-            nn.Conv2d(512, 512, 3, padding=1),
+            nn.ConvTranspose2d(512, 512, 3, padding=1),
             nn.ReLU(),
-            nn.Conv2d(512, 512, 3, padding=1),
+            nn.ConvTranspose2d(512, 512, 3, padding=1),
             nn.ReLU(),
-            nn.Conv2d(512, 512, 3, padding=1),
+            nn.ConvTranspose2d(512, 512, 3, padding=1),
             nn.ReLU()
         )
 
         self.upsample6 = nn.Upsample(scale_factor=2)
 
         self.conv7 = nn.Sequential(
-            nn.Conv2d(512, 512, 3, padding=1),
+            nn.ConvTranspose2d(512, 512, 3, padding=1),
             nn.ReLU(),
-            nn.Conv2d(512, 512, 3, padding=1),
+            nn.ConvTranspose2d(512, 512, 3, padding=1),
             nn.ReLU(),
-            nn.Conv2d(512, 512, 3, padding=1),
+            nn.ConvTranspose2d(512, 512, 3, padding=1),
             nn.ReLU()
         )
 
         self.upsample7 = nn.Upsample(scale_factor=2)
 
         self.conv8 = nn.Sequential(
-            nn.Conv2d(512, 256, 3, padding=1),
+            nn.ConvTranspose2d(512, 256, 3, padding=1),
             nn.ReLU(),
-            nn.Conv2d(256, 256, 3, padding=1),
+            nn.ConvTranspose2d(256, 256, 3, padding=1),
             nn.ReLU(),
-            nn.Conv2d(256, 256, 3, padding=1),
+            nn.ConvTranspose2d(256, 256, 3, padding=1),
             nn.ReLU()
         )
 
         self.upsample8 = nn.Upsample(scale_factor=2)
 
         self.conv9 = nn.Sequential(
-            nn.Conv2d(256, 128, 3, padding=1),
+            nn.ConvTranspose2d(256, 128, 3, padding=1),
             nn.ReLU(),
-            nn.Conv2d(128, 128, 3, padding=1),
+            nn.ConvTranspose2d(128, 128, 3, padding=1),
             nn.ReLU()
         )
 
         self.upsample9 = nn.Upsample(scale_factor=2)
 
         self.conv10 = nn.Sequential(
-            nn.Conv2d(128, 64, 3, padding=1),
+            nn.ConvTranspose2d(128, 64, 3, padding=1),
             nn.ReLU(),
-            nn.Conv2d(64, 64, 3, padding=1),
+            nn.ConvTranspose2d(64, 64, 3, padding=1),
             nn.ReLU(),
-            nn.Conv2d(64, 1, 3, padding=1)
+            nn.ConvTranspose2d(64, 1, 3, padding=1)
         )
 
         self.sigmoid = nn.Sigmoid()
@@ -127,3 +124,10 @@ class Generator(nn.Module):
         x = self.conv10(x)
         x = self.sigmoid(x)
         return x
+
+
+'''g = Generator()
+x = torch.rand([17, 3, 192, 256])
+print('Input :', x.size())
+out = g(x)
+print('Output: ', out.size())'''
