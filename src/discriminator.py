@@ -52,6 +52,6 @@ class Discriminator(nn.Module):
 D = Discriminator()
 x = torch.rand([5, 4, 192, 256])
 model = Discriminator()
-print('Discriminator input', x.size())  # [-1, 4, 192, 256] because 4 comes from 3 color channel + salience layer.
+print('Discriminator input', x.size())
 out = model(x)
-print('Discriminator out ', out.size())  # [-1, 1]
+print('Discriminator out ', out.size())

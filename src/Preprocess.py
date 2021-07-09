@@ -1,10 +1,6 @@
-import glob
 import os
-import numpy as np
 import cv2
 from tqdm import tqdm
-import matplotlib.pyplot as plt
-from constants import *
 
 INPUT_SIZE = (256, 192)
 
