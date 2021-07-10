@@ -35,7 +35,7 @@ class Discriminator(nn.Module):
             nn.Linear(100, 2),
             nn.Tanh(),
             nn.Linear(2, 1),
-            nn.Tanh()
+            nn.Sigmoid()
         )
 
     def forward(self, x):
@@ -49,9 +49,8 @@ class Discriminator(nn.Module):
         return x
 
 
-D = Discriminator()
-x = torch.rand([5, 4, 192, 256])
+'''x = torch.rand([5, 4, 192, 256])
 model = Discriminator()
 print('Discriminator input', x.size())
 out = model(x)
-print('Discriminator out ', out.size())
+print('Discriminator out ', out.size())'''

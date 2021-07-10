@@ -8,7 +8,7 @@ from tqdm import tqdm
 
 device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 
-batch_size = 34
+batch_size = 20
 lr = 0.003
 epochs = 180
 alpha = 0.05
@@ -24,8 +24,8 @@ discriminator.to(device)
 generator.to(device)
 loss_function.to(device)
 
-discriminator_optim = torch.optim.Adagrad(discriminator.parameters(), lr=lr)
-generator_optim = torch.optim.Adagrad(discriminator.parameters(), lr=lr)
+discriminator_optim = torch.optim.Adagrad(discriminator.parameters(), lr=lr, weight_decay=0.5)
+generator_optim = torch.optim.Adagrad(discriminator.parameters(), lr=lr, weight_decay=0.5)
 
 train_data = DataLoader(pathToResizedImagesTrain, batch_size)
 num_batch = train_data.num_batch
@@ -86,8 +86,7 @@ for epoch in tqdm(range(1, epochs + 1)):
             print("\nEpoch [%d/%d], Step[%d/%d], d_loss: %.4f, g_loss: %.4f, D(x): %.2f, D(G(x)): %.2f, time: %4.4f"
                   % (epoch, epochs, index + 1, num_batch, d_loss.data.cpu().numpy(), g_loss.data.cpu().numpy(),
                          real_score.cpu().numpy(), fake_score.cpu().numpy(), time.time() - start_time))
-    if (epoch + 1) % 3 == 0:
-        print('\nEpoch:', epoch, ' train_loss->', (d_cost_avg, g_cost_avg))
+    print('\nEpoch:', epoch, ' train_loss->', (d_cost_avg, g_cost_avg))
 
 torch.save(generator.state_dict(), './generator.pkl')
 torch.save(discriminator.state_dict(), './discriminator.pkl')
