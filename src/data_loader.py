@@ -10,9 +10,10 @@ from PIL import Image
 
 class DataLoader(object):
 
-    def __init__(self, img_dir, batch_size=5):
+    def __init__(self, img_dir=pathToResizedImagesTrain, batch_size=5):
         # Reading training img filename list
         self.img_list = os.listdir(img_dir)
+        self.path = img_dir
         self.batch_size = batch_size
         self.size = len(self.img_list)
         self.cursor = 0
@@ -31,8 +32,13 @@ class DataLoader(object):
         for index in range(self.batch_size):
             file_name = self.img_list[self.cursor]
             file_name = file_name.split('.')[0]
-            img_full_path = os.path.join(pathToResizedImagesTrain, file_name + '.jpg')
-            salmap_full_path = os.path.join(pathToResizedMapsTrain, file_name + '.png')
+            if self.path == pathToResizedImagesVal:
+                img_full_path = os.path.join(pathToResizedImagesVal, file_name + '.jpg')
+                salmap_full_path = os.path.join(pathToResizedMapsVal, file_name + '.png')
+            elif self.path == pathToResizedImagesTrain:
+                img_full_path = os.path.join(pathToResizedImagesTrain, file_name + '.jpg')
+                salmap_full_path = os.path.join(pathToResizedMapsTrain, file_name + '.png')
+            # print(img_full_path, salmap_full_path)
             self.cursor += 1
 
             input_img = cv2.imread(img_full_path)
@@ -45,14 +51,11 @@ class DataLoader(object):
         return img, salmap
 
 # Check the loader
-
-# trainset = DataLoader(img_dir=pathToResizedImagesTrain)
-
+# trainset = DataLoader(pathToResizedImagesVal)
 # print('Data Loader implemented.')
-# img, salmap = d.get_batch()
+# img, salmap = trainset.get_batch()
 # I1 = img[4].numpy()
 # S1 = salmap[4].numpy()
-
 # img_after = np.transpose(I1, (1, 2, 0))
 # salmap_after = np.transpose(S1, (1, 2, 0))
 
